@@ -2,6 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
+//TODO ATTACKING
+
+
+
+
 public class PlayerMovement : MonoBehaviour
 {
     public float movementAcceleration = 10f;
