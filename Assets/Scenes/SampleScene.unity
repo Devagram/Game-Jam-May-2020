@@ -510,12 +510,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementAcceleration: 10
   movementSpeed: 50
+  buffMultiplier: 0
   movementTimer: 0.5
   popForce: 3
   offSet: 0.5
   randOffSetRange: 2
   randMoveSetRange: 2
   poolCastTime: 5
+  grassSatisfactionTime: 0
   rigidBody: {fileID: 860678478}
   capCollider: {fileID: 860678479}
   objMaterial: {fileID: 0}
@@ -1350,12 +1352,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementAcceleration: 10
   movementSpeed: 50
+  buffMultiplier: 0
   movementTimer: 0.5
   popForce: 3
   offSet: 0.5
   randOffSetRange: 2
   randMoveSetRange: 2
   poolCastTime: 5
+  grassSatisfactionTime: 0
   rigidBody: {fileID: 1263898895}
   capCollider: {fileID: 1263898896}
   objMaterial: {fileID: 0}
@@ -1495,12 +1499,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementAcceleration: 10
   movementSpeed: 50
+  buffMultiplier: 0
   movementTimer: 0.5
   popForce: 3
   offSet: 0.5
   randOffSetRange: 2
   randMoveSetRange: 2
   poolCastTime: 5
+  grassSatisfactionTime: 0
   rigidBody: {fileID: 1431526157}
   capCollider: {fileID: 1431526158}
   objMaterial: {fileID: 0}
@@ -1832,12 +1838,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementAcceleration: 10
   movementSpeed: 50
+  buffMultiplier: 0
   movementTimer: 0.5
   popForce: 3
   offSet: 0.5
   randOffSetRange: 2
   randMoveSetRange: 2
   poolCastTime: 5
+  grassSatisfactionTime: 0
   rigidBody: {fileID: 1781686237}
   capCollider: {fileID: 1781686238}
   objMaterial: {fileID: 0}
@@ -2169,12 +2177,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementAcceleration: 10
   movementSpeed: 50
+  buffMultiplier: 0
   movementTimer: 0.5
   popForce: 3
   offSet: 0.5
   randOffSetRange: 2
   randMoveSetRange: 2
   poolCastTime: 5
+  grassSatisfactionTime: 0
   rigidBody: {fileID: 1940229037}
   capCollider: {fileID: 1940229038}
   objMaterial: {fileID: 0}
@@ -2619,6 +2629,10 @@ PrefabInstance:
     - target: {fileID: 4254697577103438720, guid: c91f0118270f1d845ad4c22eebf979ec, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4254697577103438722, guid: c91f0118270f1d845ad4c22eebf979ec, type: 3}
+      propertyPath: m_Drag
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4254697577103438724, guid: c91f0118270f1d845ad4c22eebf979ec, type: 3}
       propertyPath: m_Name
