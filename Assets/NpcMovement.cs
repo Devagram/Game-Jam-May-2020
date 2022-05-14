@@ -6,12 +6,14 @@ public class NpcMovement : MonoBehaviour
 {
     public float movementAcceleration = 10f;
     public float movementSpeed = 50f;
+    public float buffMultiplier;
     public float movementTimer;
     public float popForce;
     public float offSet;
     public float randOffSetRange;
     public float randMoveSetRange;
     public float poolCastTime;
+    public float grassSatisfactionTime;
     public Rigidbody rigidBody;
     public Collider capCollider;
     public Material objMaterial;
@@ -21,6 +23,7 @@ public class NpcMovement : MonoBehaviour
     public float distanceToGround;
 
     bool inPool = false;
+    bool inGrass = false;
     bool gettingReadyToMove = false;
 
 
@@ -57,6 +60,9 @@ public class NpcMovement : MonoBehaviour
     {
         float duration = movementTimer;
         float normalizedTime = 0;
+        float randToMove;
+        float randToMoveWO;
+        Vector3 forceToMove;
         gettingReadyToMove = true;
         while (normalizedTime <= 1f)
         {
@@ -66,10 +72,24 @@ public class NpcMovement : MonoBehaviour
         }
         gettingReadyToMove = false;
         //Debug.Log(inPool);
-        if (isGrounded() && inPool == false) {
-            
-            rigidBody.AddForce(transform.right * Random.Range(-randMoveSetRange - 1, randMoveSetRange + 1));
-            rigidBody.AddForce(transform.forward * Random.Range(-randMoveSetRange - 1, randMoveSetRange + 1));
+        if (isGrounded() && inPool == false)
+        {
+            //Debug.Log("buffMultiplier: " + buffMultiplier);
+            randToMoveWO = Random.Range(-randMoveSetRange - 1, randMoveSetRange + 1);
+            randToMove = randToMoveWO * buffMultiplier;
+
+            if (Random.Range(-1, 1) >= 0)
+            {
+                //Debug.Log("Applying force on right: " + randToMove + " Without multiplier:" + randToMoveWO);
+                forceToMove = transform.right * randToMove;
+                rigidBody.AddForce(forceToMove);
+            }
+            else
+            {
+                //Debug.Log("Applying force on forward: " + randToMove + " Without multiplier:" + randToMoveWO);
+                forceToMove = transform.forward * randToMove;
+                rigidBody.AddForce(forceToMove);
+            }
         }
     }
 
@@ -81,8 +101,17 @@ public class NpcMovement : MonoBehaviour
         {
             inPool = true;
             //start timer to multiplication
-            Debug.Log("in if: " + collidingWith.tag);
+            //Debug.Log("in if: " + collidingWith.tag);
             StartCoroutine(Countdown());
+
+        }
+        else if (collidingWith.tag == "Grass")
+        {
+            inGrass = true;
+            rend.material.color = Color.green;
+            //start timer to multiplication
+            //Debug.Log("in if: " + collidingWith.tag);
+            StartCoroutine(Satisfied());
 
         }
     }
@@ -95,16 +124,41 @@ public class NpcMovement : MonoBehaviour
             inPool = false;
             rend.material.color = Color.white;
         }
+        else if (collidingWith.tag == "Grass")
+        {
+            inGrass = false;
+            rend.material.color = Color.white;
+        }
+    }
+    private IEnumerator Satisfied()
+    {
+        float duration = grassSatisfactionTime;
+        float normalizedTime = 0;
+
+        while (normalizedTime <= 1f)
+        {
+            if (inGrass == true)
+            {
+                rend.material.color = Color.blue;
+                buffMultiplier = .5f;
+                //Debug.Log("buffMultiplier: " + buffMultiplier);
+            }
+            normalizedTime += Time.deltaTime / duration;
+            yield return null;
+        }
+        buffMultiplier = 1f;
+        rend.material.color = Color.white;
     }
 
     private IEnumerator Countdown()
     {
-        float duration = poolCastTime; 
+        float duration = poolCastTime;
         float normalizedTime = 0;
         while (normalizedTime <= 1f)
         {
             normalizedTime += Time.deltaTime / duration;
-            if (inPool == true) {
+            if (inPool == true)
+            {
                 gradient = new Gradient();
 
                 // Populate the color keys at the relative time 0 and 1 (0 and 100%)
@@ -124,17 +178,19 @@ public class NpcMovement : MonoBehaviour
                 gradient.SetKeys(colorKey, alphaKey);
 
                 // What's the color at the relative time 0.25 (25 %) ?
-                
+
                 rend.material.color = gradient.Evaluate(normalizedTime);
                 //Debug.Log(gradient.Evaluate(0.25f));
             }
             yield return null;
         }
-        if (inPool == true) {
+        if (inPool == true)
+        {
             for (int i = 0; i < multiplier; i++)
             {
                 //Debug.Log("in forloop: " + i);
                 Instantiate(toDuplicate, new Vector3(transform.position.x + Random.Range(0f, randOffSetRange), offSet, transform.position.z), transform.rotation);
+                rigidBody.AddForce(transform.up * popForce);
             }
         }
     }
