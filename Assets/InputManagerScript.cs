@@ -27,5 +27,17 @@ public class InputManagerScript : MonoBehaviour
         {
             anim.SetBool("walk", false);
         }
+
+
+        if (Input.GetButtonDown("Fire1"))
+        {
+            anim.SetTrigger("wack");
+        }
+        if(Input.GetButtonUp("Fire1"))
+        {
+            anim.ResetTrigger("wack");
+        }
+
+
     }
 }
