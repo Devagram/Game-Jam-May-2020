@@ -16,6 +16,8 @@ public class PlayerMovement : MonoBehaviour
     public float movementSpeed = 50f;
     public Rigidbody rigidBody;
     public Collider capCollider;
+    public Collider attackHitBox;
+    public float attackDuration;
     //public GameObject groundPlain;
 
     public float distanceToGround;
@@ -25,7 +27,7 @@ public class PlayerMovement : MonoBehaviour
     public bool trueW = false;
 
 
-    Vector3 movement;
+    //Vector3 movement;
 
 
     // Start is called before the first frame update
@@ -76,10 +78,58 @@ public class PlayerMovement : MonoBehaviour
         //ATTACKING
         if (Input.GetButtonDown("Fire1"))
         {
+            attackHitBox.enabled = true;
+            StartCoroutine(Attack());
+        }
+    }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        GameObject collidingWith = other.gameObject;
+        Rigidbody rigidBodyIntersected = collidingWith.gameObject.GetComponent<Rigidbody>();
+        //Debug.Log("test: " + collidingWith.tag);
+
+        if (collidingWith.tag == "hittable")
+        {
+            rigidBodyIntersected.AddForce(transform.forward * 15);
+            rigidBody.AddForce(transform.forward * -300);
+        }
+        if (collidingWith.tag == "Grass")
+        {
+            movementSpeed = 20;
+        }
+        if (collidingWith.tag == "Pool")
+        {
+            movementSpeed = 10;
         }
 
+    }
 
+    private void OnTriggerExit(Collider other)
+    {
+        GameObject collidingWith = other.gameObject;
+        Rigidbody rigidBodyIntersected = collidingWith.gameObject.GetComponent<Rigidbody>();
+        if (collidingWith.tag == "Grass")
+        {
+            movementSpeed = 50;
+        }
+        if (collidingWith.tag == "Pool")
+        {
+            movementSpeed = 50;
+        }
+    }
+
+        private IEnumerator Attack()
+    {
+        float duration = attackDuration;
+        float normalizedTime = 0;
+
+        while (normalizedTime <= 1f)
+        {
+            normalizedTime += Time.deltaTime / duration;
+            yield return null;
+        }
+        attackHitBox.enabled = false;
     }
 
     void FixedUpdate()
@@ -94,22 +144,22 @@ public class PlayerMovement : MonoBehaviour
         }
         RaycastHit hit;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        bool waiting = false;
+        //bool waiting = false;
         //Quaternion rotation;
         //Vector3 lookPosition;
         //GameObject hitObject;
-        Vector3 playerPositionNormalized = new Vector3(transform.position.x, 0, transform.position.z);
-        Vector3 mousePositionNormalized = new Vector3(Input.mousePosition.x - Screen.width / 2, 0, Input.mousePosition.y - Screen.height / 2);
-        Vector3 rotatedPlayerPosition = new Vector3(transform.position.x + transform.position.y / Mathf.Sqrt(2), 0, transform.position.y - transform.position.x / Mathf.Sqrt(2));
-        float distanceToMouse = Vector3.Distance(playerPositionNormalized, mousePositionNormalized);
+        //Vector3 playerPositionNormalized = new Vector3(transform.position.x, 0, transform.position.z);
+        //Vector3 mousePositionNormalized = new Vector3(Input.mousePosition.x - Screen.width / 2, 0, Input.mousePosition.y - Screen.height / 2);
+        //Vector3 rotatedPlayerPosition = new Vector3(transform.position.x + transform.position.y / Mathf.Sqrt(2), 0, transform.position.y - transform.position.x / Mathf.Sqrt(2));
+        //float distanceToMouse = Vector3.Distance(playerPositionNormalized, mousePositionNormalized);
         //todo, correct for unit difference, and 45degree rotation of stage
 
-        Debug.Log("Player position: " + playerPositionNormalized);
-        Debug.Log("Player position Rotated: " + rotatedPlayerPosition);
+        //Debug.Log("Player position: " + playerPositionNormalized);
+        //Debug.Log("Player position Rotated: " + rotatedPlayerPosition);
         //Debug.Log("Mouse position: " + mousePositionNormalized);
         //Debug.Log("Distance to mouse: " + distanceToMouse);
-
-        if (movingForward == true && distanceToMouse <= 25)
+        /*
+        if (movingForward == true)
         {
             movingForward = false;
             waiting = true;
@@ -119,8 +169,9 @@ public class PlayerMovement : MonoBehaviour
             movingForward = true;
             waiting = false;
         }
+        */
 
-        if (Physics.Raycast(ray, out hit, 100) && distanceToMouse >= 20)
+        if (Physics.Raycast(ray, out hit, 100))
         {
             Vector3 forward = transform.TransformDirection(Vector3.forward) * 100 + new Vector3(transform.eulerAngles.x, 0, transform.eulerAngles.z);
             //Debug.DrawRay(transform.position, forward, Color.red);

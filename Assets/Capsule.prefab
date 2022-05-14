@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 4254697577103438727}
   - component: {fileID: 4254697577103438722}
   - component: {fileID: 4254697577103438723}
-  - component: {fileID: 4254697577103438733}
   - component: {fileID: 6475942890302704529}
   m_Layer: 0
   m_Name: Capsule
@@ -136,23 +135,11 @@ MonoBehaviour:
   movementSpeed: 10
   rigidBody: {fileID: 4254697577103438722}
   capCollider: {fileID: 4254697577103438727}
+  attackHitBox: {fileID: 0}
+  attackDuration: 0
   distanceToGround: 0
   movingForward: 0
   trueW: 0
---- !u!136 &4254697577103438733
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4254697577103438724}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &6475942890302704529
 MonoBehaviour:
   m_ObjectHideFlags: 0

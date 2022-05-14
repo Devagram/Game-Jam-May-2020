@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class NpcMovement : MonoBehaviour
 {
+    public int hitPoints;
     public float movementAcceleration = 10f;
     public float movementSpeed = 50f;
     public float buffMultiplier;
@@ -48,6 +49,10 @@ public class NpcMovement : MonoBehaviour
         {
             //wDebug.Log("started coroutine for movement");
             StartCoroutine(RandomMovement());
+        }
+        if (hitPoints <= 0)
+        {
+            Destroy(this);
         }
     }
 
@@ -102,12 +107,14 @@ public class NpcMovement : MonoBehaviour
             inPool = true;
             //start timer to multiplication
             //Debug.Log("in if: " + collidingWith.tag);
+            rigidBody.velocity = new Vector3(0,0,0);
             StartCoroutine(Countdown());
 
         }
         else if (collidingWith.tag == "Grass")
         {
             inGrass = true;
+            rigidBody.velocity = rigidBody.velocity / 2;
             rend.material.color = Color.green;
             //start timer to multiplication
             //Debug.Log("in if: " + collidingWith.tag);
