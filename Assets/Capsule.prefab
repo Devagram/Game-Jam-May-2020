@@ -99,9 +99,9 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.5
-  m_Height: 2
+  m_Height: 2.2502885
   m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 0.3195164, z: 0}
 --- !u!54 &4254697577103438722
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -133,6 +133,7 @@ MonoBehaviour:
   movementAcceleration: 5
   jumpForce: 300
   movementSpeed: 10
+  attackDamage: 0
   rigidBody: {fileID: 4254697577103438722}
   capCollider: {fileID: 4254697577103438727}
   attackHitBox: {fileID: 0}

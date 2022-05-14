@@ -11,9 +11,11 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float movementAcceleration = 10f;
-    public float jumpForce = 100f;
-    public float movementSpeed = 50f;
+    public float movementAcceleration;
+    public float jumpForce;
+    public float startingSpeed;
+    private float movementSpeed;
+    public float attackDamage;
     public Rigidbody rigidBody;
     public Collider capCollider;
     public Collider attackHitBox;
@@ -33,6 +35,7 @@ public class PlayerMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        movementSpeed = startingSpeed;
         Cursor.lockState = CursorLockMode.Confined;
         distanceToGround = capCollider.bounds.extents.y;
     }
@@ -87,20 +90,23 @@ public class PlayerMovement : MonoBehaviour
     {
         GameObject collidingWith = other.gameObject;
         Rigidbody rigidBodyIntersected = collidingWith.gameObject.GetComponent<Rigidbody>();
+        NpcMovement npcCollidedWith;
         //Debug.Log("test: " + collidingWith.tag);
 
         if (collidingWith.tag == "hittable")
         {
+            npcCollidedWith = collidingWith.gameObject.GetComponent<NpcMovement>();
             rigidBodyIntersected.AddForce(transform.forward * 15);
+            npcCollidedWith.Damage(attackDamage);
             rigidBody.AddForce(transform.forward * -300);
         }
         if (collidingWith.tag == "Grass")
         {
-            movementSpeed = 20;
+            movementSpeed = 7;
         }
         if (collidingWith.tag == "Pool")
         {
-            movementSpeed = 10;
+            movementSpeed = 5;
         }
 
     }
@@ -111,15 +117,15 @@ public class PlayerMovement : MonoBehaviour
         Rigidbody rigidBodyIntersected = collidingWith.gameObject.GetComponent<Rigidbody>();
         if (collidingWith.tag == "Grass")
         {
-            movementSpeed = 50;
+            movementSpeed = startingSpeed;
         }
         if (collidingWith.tag == "Pool")
         {
-            movementSpeed = 50;
+            movementSpeed = startingSpeed;
         }
     }
 
-        private IEnumerator Attack()
+    private IEnumerator Attack()
     {
         float duration = attackDuration;
         float normalizedTime = 0;

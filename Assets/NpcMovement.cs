@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class NpcMovement : MonoBehaviour
 {
-    public int hitPoints;
-    public float movementAcceleration = 10f;
-    public float movementSpeed = 50f;
+    public float hitPoints;
+    public float movementAcceleration;
+    public float movementSpeed;
     public float buffMultiplier;
     public float movementTimer;
     public float popForce;
@@ -18,6 +18,12 @@ public class NpcMovement : MonoBehaviour
     public Rigidbody rigidBody;
     public Collider capCollider;
     public Material objMaterial;
+    private foodScript[] foodScriptsOnField;
+    private List<GameObject> foodOnField = new List<GameObject>();
+    private List<Transform> transformsToSearch = new List<Transform>();
+    private Vector3 closestFood;
+    private GameObject[] foodArray;
+    private GameController gameController;
 
     public int multiplier;
     public GameObject toDuplicate;
@@ -25,7 +31,9 @@ public class NpcMovement : MonoBehaviour
 
     bool inPool = false;
     bool inGrass = false;
+    bool eating = false;
     bool gettingReadyToMove = false;
+    bool foodHasBeenFound = false;
 
 
     Gradient gradient;
@@ -37,6 +45,7 @@ public class NpcMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gameController = Object.FindObjectOfType<GameController>();
         rend = GetComponent<Renderer>();
         rigidBody.AddForce(transform.up * popForce);
         distanceToGround = capCollider.bounds.extents.y;
@@ -45,6 +54,20 @@ public class NpcMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+       
+    }
+
+    void FixedUpdate()
+    {
+        Debug.Log("am i grounded?: " + isGrounded());
+        if (isGrounded()) { 
+            if (rigidBody.velocity.magnitude > movementSpeed)
+            {
+                rigidBody.velocity = rigidBody.velocity.normalized * movementSpeed;
+            }
+        }
+        
+        FindFood();
         if (inPool == false && gettingReadyToMove == false)
         {
             //wDebug.Log("started coroutine for movement");
@@ -52,8 +75,52 @@ public class NpcMovement : MonoBehaviour
         }
         if (hitPoints <= 0)
         {
-            Destroy(this);
+            Destroy(this.gameObject);
         }
+    }
+
+    private void FindFood()
+    {
+        if (!foodHasBeenFound) { 
+            foodScriptsOnField = Object.FindObjectsOfType<foodScript>();
+            foreach (foodScript script in foodScriptsOnField)
+            {
+                foodOnField.Add(script.gameObject);
+            }
+            foodArray = foodOnField.ToArray();
+        }
+        
+        
+        foreach (GameObject obj in foodArray)
+        {
+            transformsToSearch.Add(obj.transform);
+        }
+        Vector3 tempVect = new Vector3(0,1000000,0);
+        if (!foodHasBeenFound && gameController.foodTime == true) {
+            tempVect = GetClosestFood(transformsToSearch.ToArray()).position;
+        }
+        if (tempVect != new Vector3(0, 1000000, 0) && !foodHasBeenFound)
+        {
+            foodHasBeenFound = true;
+            closestFood = tempVect;
+        }
+    }
+
+    Transform GetClosestFood(Transform[] foodArray)
+    {
+        Transform tMin = null;
+        float minDist = Mathf.Infinity;
+        Vector3 currentPos = transform.position;
+        foreach (Transform f in foodArray)
+        {
+            float dist = Vector3.Distance(f.position, currentPos);
+            if (dist < minDist)
+            {
+                tMin = f;
+                minDist = dist;
+            }
+        }
+        return tMin;
     }
 
     bool isGrounded()
@@ -87,14 +154,34 @@ public class NpcMovement : MonoBehaviour
             {
                 //Debug.Log("Applying force on right: " + randToMove + " Without multiplier:" + randToMoveWO);
                 forceToMove = transform.right * randToMove;
-                rigidBody.AddForce(forceToMove);
             }
             else
             {
                 //Debug.Log("Applying force on forward: " + randToMove + " Without multiplier:" + randToMoveWO);
                 forceToMove = transform.forward * randToMove;
+            }
+            if (foodScriptsOnField.Length >= 1 && eating == false && gameController.foodTime == true) {
+                Debug.Log("numbers: " + (closestFood - transform.position));
+                forceToMove = (closestFood - transform.position);
+                if (forceToMove.x > 15 || forceToMove.y > 15) {
+                    rigidBody.AddForce(forceToMove/6);
+                }
+                else if (forceToMove.x <= 15 && forceToMove.x > 8 || forceToMove.y <= 15 && forceToMove.y > 8)
+                {
+                    rigidBody.AddForce(forceToMove/4);
+                }
+                else if (forceToMove.x <= 8 && forceToMove.x > 4 || forceToMove.y <= 8 && forceToMove.y > 4)
+                {
+                    rigidBody.AddForce(forceToMove/2);
+                } else
+                {
+                    rigidBody.AddForce(forceToMove);
+                }
+            } 
+            else {
                 rigidBody.AddForce(forceToMove);
             }
+            
         }
     }
 
@@ -110,8 +197,7 @@ public class NpcMovement : MonoBehaviour
             rigidBody.velocity = new Vector3(0,0,0);
             StartCoroutine(Countdown());
 
-        }
-        else if (collidingWith.tag == "Grass")
+        } else if (collidingWith.tag == "Grass")
         {
             inGrass = true;
             rigidBody.velocity = rigidBody.velocity / 2;
@@ -120,8 +206,18 @@ public class NpcMovement : MonoBehaviour
             //Debug.Log("in if: " + collidingWith.tag);
             StartCoroutine(Satisfied());
 
+        } else if (collidingWith.tag == "Food")
+        {
+            //eating = true;
+            //Eatfood
         }
     }
+
+    public void Damage(float damageToTake)
+    {
+        hitPoints -= damageToTake;
+    }
+
     private void OnTriggerExit(Collider other)
     {
         GameObject collidingWith = other.gameObject;
