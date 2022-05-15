@@ -53,14 +53,14 @@
     <UnityVersion>2021.2.12f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Analyzer Include="C:\Program Files (x86)\Microsoft Visual Studio Tools for Unity\16.0\Analyzers\Microsoft.Unity.Analyzers.dll" />
+    <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\foodScript.cs" />
+    <Compile Include="Assets\GameController.cs" />
     <Compile Include="Assets\PlayerMovement.cs" />
     <Compile Include="Assets\InputManagerScript.cs" />
     <Compile Include="Assets\NpcMovement.cs" />
-    <Compile Include="Assets\GameController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
@@ -681,6 +681,10 @@
       <Project>{17C89050-00B9-620D-84E9-C2E82004F7A6}</Project>
       <Name>Unity.VisualScripting.Flow.Editor</Name>
     </ProjectReference>
+    <ProjectReference Include="Unity.ShaderGraph.Editor.csproj">
+      <Project>{B3FEB4D3-9F74-A2EB-F0D4-2BDFB787C4FA}</Project>
+      <Name>Unity.ShaderGraph.Editor</Name>
+    </ProjectReference>
     <ProjectReference Include="Unity.VSCode.Editor.csproj">
       <Project>{9FF8E30A-C570-27D5-5E29-6358DF509A8F}</Project>
       <Name>Unity.VSCode.Editor</Name>
@@ -696,6 +700,10 @@
     <ProjectReference Include="Unity.VisualStudio.Editor.csproj">
       <Project>{C536B7E2-4BE0-4300-AC9F-1B8EBC933C4B}</Project>
       <Name>Unity.VisualStudio.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary.csproj">
+      <Project>{2B9B5FE7-2F07-5F1B-B133-8E61DB4A4D9F}</Project>
+      <Name>Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.Timeline.Editor.csproj">
       <Project>{04056A44-FEE8-5D70-95F6-0834C644B214}</Project>
@@ -717,9 +725,17 @@
       <Project>{2C1C295A-5B93-3864-92B9-AEBD665A7D99}</Project>
       <Name>Unity.VisualScripting.State.Editor</Name>
     </ProjectReference>
+    <ProjectReference Include="Unity.Searcher.Editor.csproj">
+      <Project>{7993DC9A-364C-ABA8-6294-21B457CDA834}</Project>
+      <Name>Unity.Searcher.Editor</Name>
+    </ProjectReference>
     <ProjectReference Include="Unity.VisualScripting.SettingsProvider.Editor.csproj">
       <Project>{0176BC7F-7F51-D796-2005-D29D6E65E406}</Project>
       <Name>Unity.VisualScripting.SettingsProvider.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.RenderPipelines.Core.Runtime.csproj">
+      <Project>{7A0152AE-347A-AA0C-3CB0-8BB51BE6C6E9}</Project>
+      <Name>Unity.RenderPipelines.Core.Runtime</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.VisualScripting.Flow.csproj">
       <Project>{6991C0AD-EB01-0075-D50A-B8457680A4A9}</Project>
@@ -737,9 +753,17 @@
       <Project>{489F6263-E02B-6A7E-E55D-848FFC42BC25}</Project>
       <Name>Unity.Rider.Editor</Name>
     </ProjectReference>
+    <ProjectReference Include="Unity.RenderPipelines.Core.ShaderLibrary.csproj">
+      <Project>{090B204D-359D-D776-A7A8-0704CE758A51}</Project>
+      <Name>Unity.RenderPipelines.Core.ShaderLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="UnityEngine.UI.csproj">
       <Project>{1807822E-2F89-8C49-FEA9-FAD3E4ADD829}</Project>
       <Name>UnityEngine.UI</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.RenderPipelines.Core.Editor.csproj">
+      <Project>{27E80BC9-FC13-C06E-511B-EE9D1FAC877A}</Project>
+      <Name>Unity.RenderPipelines.Core.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.VisualScripting.State.csproj">
       <Project>{A13EB9EE-D40D-3CB6-0ACE-D5A6A2D0ED6A}</Project>
