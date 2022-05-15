@@ -4,17 +4,17 @@ ModelImporter:
   serializedVersion: 21202
   internalIDToNameTable:
   - first:
-      74: -3100369314251171874
-    second: Idle
+      74: -3880581976594992817
+    second: ArmatureAction
   - first:
-      74: 5522812681064789136
-    second: Run
-  - first:
-      74: 7509640188325939964
-    second: Slash
+      74: 4781951162920444690
+    second: Armature|ArmatureAction
   - first:
       74: -8945691123924629249
     second: Armature|Idle
+  - first:
+      74: 3031411921458128146
+    second: Armature|Roll
   - first:
       74: -7551964380084998518
     second: Armature|Run
@@ -51,8 +51,8 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Idle
-      takeName: Idle
+      name: ArmatureAction
+      takeName: ArmatureAction
       internalID: 0
       firstFrame: 0
       lastFrame: 50
@@ -80,8 +80,8 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Run
-      takeName: Run
+      name: Armature|ArmatureAction
+      takeName: Armature|ArmatureAction
       internalID: 0
       firstFrame: 0
       lastFrame: 50
@@ -92,35 +92,6 @@ ModelImporter:
       loop: 0
       hasAdditiveReferencePose: 0
       loopTime: 0
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
-    - serializedVersion: 16
-      name: Slash
-      takeName: Slash
-      internalID: 0
-      firstFrame: 0
-      lastFrame: 50
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
@@ -150,6 +121,35 @@ ModelImporter:
       loop: 0
       hasAdditiveReferencePose: 0
       loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Armature|Roll
+      takeName: Armature|Roll
+      internalID: 0
+      firstFrame: 0
+      lastFrame: 1
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
@@ -220,89 +220,9 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events: []
-      transformMask:
-      - path: 
-        weight: 1
-      - path: Armature
-        weight: 1
-      - path: Armature/Base
-        weight: 1
-      - path: Armature/Base/Pelvis
-        weight: 1
-      - path: Armature/Base/Pelvis/Chest
-        weight: 1
-      - path: Armature/Base/Pelvis/Chest/Head
-        weight: 1
-      - path: Armature/Base/Pelvis/Chest/Head/Head_end
-        weight: 1
-      - path: Armature/Base/Pelvis/Chest/L.Arm
-        weight: 1
-      - path: Armature/Base/Pelvis/Chest/L.Arm/L.Arm.001
-        weight: 1
-      - path: Armature/Base/Pelvis/Chest/L.Arm/L.Arm.001/L.Hand
-        weight: 1
-      - path: Armature/Base/Pelvis/Chest/L.Arm/L.Arm.001/L.Hand/L.Hand_end
-        weight: 1
-      - path: Armature/Base/Pelvis/Chest/R.Arm
-        weight: 1
-      - path: Armature/Base/Pelvis/Chest/R.Arm/R.Arm.001
-        weight: 1
-      - path: Armature/Base/Pelvis/Chest/R.Arm/R.Arm.001/R.Hand
-        weight: 1
-      - path: Armature/Base/Pelvis/Chest/R.Arm/R.Arm.001/R.Hand/R.Hand_end
-        weight: 1
-      - path: Armature/Base/Pelvis/L.Hip
-        weight: 1
-      - path: Armature/Base/Pelvis/L.Hip/L.Shin
-        weight: 1
-      - path: Armature/Base/Pelvis/L.Hip/L.Shin/L.Foot
-        weight: 1
-      - path: Armature/Base/Pelvis/L.Hip/L.Shin/L.Foot/L.Foot_end
-        weight: 1
-      - path: Armature/Base/Pelvis/R.Hip
-        weight: 1
-      - path: Armature/Base/Pelvis/R.Hip/R.Shin
-        weight: 1
-      - path: Armature/Base/Pelvis/R.Hip/R.Shin/R.Foot
-        weight: 1
-      - path: Armature/Base/Pelvis/R.Hip/R.Shin/R.Foot/R.Foot_end
-        weight: 1
-      - path: Cube
-        weight: 0
-      - path: MainPlayer
-        weight: 0
-      - path: MainPlayer.001
-        weight: 0
-      - path: MainPlayer.002
-        weight: 0
-      - path: MainPlayer.003
-        weight: 0
-      - path: MainPlayer.004
-        weight: 0
-      - path: MainPlayer.005
-        weight: 0
-      - path: MainPlayer.006
-        weight: 0
-      - path: MainPlayer.007
-        weight: 0
-      - path: MainPlayer.008
-        weight: 0
-      - path: MainPlayer.009
-        weight: 0
-      - path: MainPlayer.010
-        weight: 0
-      - path: MainPlayer.011
-        weight: 0
-      - path: MainPlayer.012
-        weight: 0
-      - path: MainPlayer.013
-        weight: 0
-      - path: MainPlayer.014
-        weight: 0
-      - path: MainPlayer.015
-        weight: 0
-      maskType: 1
-      maskSource: {fileID: 31900000, guid: 7de0ba0204999c94bbf813ab4e011117, type: 2}
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     isReadable: 0
   meshes:
@@ -369,7 +289,7 @@ ModelImporter:
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 2
   humanoidOversampling: 1
-  avatarSetup: 1
+  avatarSetup: 0
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
   additionalBone: 0
   userData: 

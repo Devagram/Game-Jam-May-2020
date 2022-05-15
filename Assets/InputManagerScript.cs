@@ -33,11 +33,14 @@ public class InputManagerScript : MonoBehaviour
         {
             anim.SetTrigger("wack");
         }
-        if(Input.GetButtonUp("Fire1"))
+        if (Input.GetButtonUp("Fire1"))
         {
             anim.ResetTrigger("wack");
         }
 
-
+        if (Input.GetButton("Jump"))
+        {
+            anim.Play("Roll");
+        }
     }
 }
