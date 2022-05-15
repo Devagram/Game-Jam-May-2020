@@ -5,7 +5,7 @@ using UnityEngine;
 public class NpcMovement : MonoBehaviour
 {
     public float hitPoints;
-    public float movementAcceleration;
+    //public float movementAcceleration;
     public float movementSpeed;
     public float buffMultiplier;
     public float movementTimer;
@@ -59,8 +59,9 @@ public class NpcMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        Debug.Log("am i grounded?: " + isGrounded());
-        if (isGrounded()) { 
+        //Debug.Log("am i grounded?: " + isGrounded());
+        //Debug.Log("am i grounded?: " + isGrounded());
+        if (isGrounded()) {
             if (rigidBody.velocity.magnitude > movementSpeed)
             {
                 rigidBody.velocity = rigidBody.velocity.normalized * movementSpeed;
@@ -133,7 +134,7 @@ public class NpcMovement : MonoBehaviour
         float duration = movementTimer;
         float normalizedTime = 0;
         float randToMove;
-        float randToMoveWO;
+        //float randToMoveWO;
         Vector3 forceToMove;
         gettingReadyToMove = true;
         while (normalizedTime <= 1f)
@@ -147,8 +148,8 @@ public class NpcMovement : MonoBehaviour
         if (isGrounded() && inPool == false)
         {
             //Debug.Log("buffMultiplier: " + buffMultiplier);
-            randToMoveWO = Random.Range(-randMoveSetRange - 1, randMoveSetRange + 1);
-            randToMove = randToMoveWO * buffMultiplier;
+            randToMove = Random.Range(-randMoveSetRange - 1, randMoveSetRange + 1);
+            randToMove *= buffMultiplier;
 
             if (Random.Range(-1, 1) >= 0)
             {

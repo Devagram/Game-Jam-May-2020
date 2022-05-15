@@ -12,7 +12,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public float movementAcceleration;
-    public float jumpForce;
+    public float dashForce;
     public float startingSpeed;
     private float movementSpeed;
     public float attackDamage;
@@ -20,6 +20,7 @@ public class PlayerMovement : MonoBehaviour
     public Collider capCollider;
     public Collider attackHitBox;
     public float attackDuration;
+    public float dashCooldown;
     //public GameObject groundPlain;
 
     public float distanceToGround;
@@ -27,6 +28,7 @@ public class PlayerMovement : MonoBehaviour
 
     public bool movingForward = false;
     public bool trueW = false;
+    public bool inDash = false;
 
 
     //Vector3 movement;
@@ -52,7 +54,7 @@ public class PlayerMovement : MonoBehaviour
         {
             Cursor.lockState = CursorLockMode.Confined;
         }
-        if (isGrounded())
+        if (isGrounded() && inDash == false)
         {
             if (movingForward == true)
             {
@@ -65,10 +67,10 @@ public class PlayerMovement : MonoBehaviour
                 movingForward = true;
                 trueW = true;
             }
-            if (Input.GetButtonDown("Jump"))
+            if (Input.GetButton("Jump"))
             {
-                //Debug.Log("Jump button pushed");
-                rigidBody.AddForce(transform.up * jumpForce);
+                Debug.Log("Dash button pushed");
+                StartCoroutine(DashCooldown());
             }
         }
         if (Input.GetButtonUp("Up"))
@@ -84,6 +86,23 @@ public class PlayerMovement : MonoBehaviour
             attackHitBox.enabled = true;
             StartCoroutine(Attack());
         }
+    }
+
+    private IEnumerator DashCooldown()
+    {
+        float duration = dashCooldown;
+        float normalizedTime = 0;
+        
+        //todo allow rotation to work independently and lock direction
+
+        while (normalizedTime <= 1f)
+        {
+            inDash = true;
+            rigidBody.AddForce(transform.forward * dashForce);
+            normalizedTime += Time.deltaTime / duration;
+            yield return null;
+        }
+        inDash = false;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -183,7 +202,9 @@ public class PlayerMovement : MonoBehaviour
             //Debug.DrawRay(transform.position, forward, Color.red);
             //Debug.Log("hit.distance: " + hit.distance);//why is this so inconsistent? Seems to not make sense.
             //if(hit.distance > 30f)
-            transform.LookAt(new Vector3(hit.point.x, 0, hit.point.z));
+            if (inDash == false) {
+                transform.LookAt(new Vector3(hit.point.x, 0, hit.point.z));
+            }
             transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
         }
     }

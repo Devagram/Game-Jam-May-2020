@@ -5572,7 +5572,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 11.12
+  orthographic size: 15
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -7045,28 +7045,16 @@ GameObject:
   - component: {fileID: 1169070626}
   - component: {fileID: 1169070625}
   - component: {fileID: 1169070624}
-  - component: {fileID: 1169070623}
+  - component: {fileID: 1169070628}
+  - component: {fileID: 1169070629}
+  - component: {fileID: 1169070630}
   m_Layer: 0
   m_Name: Cylinder (1)
-  m_TagString: Untagged
+  m_TagString: hittable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!136 &1169070623
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1169070622}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5000001
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
 --- !u!23 &1169070624
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -7125,13 +7113,64 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1169070622}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.0597477, y: 3.3373437, z: -2.7495823}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 4.94, y: 4.74, z: -5.08}
+  m_LocalScale: {x: 3, y: 1, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 32
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &1169070628
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1169070622}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5472902
+  m_Center: {x: 0.0010854404, y: 0.60725534, z: -0.005284866}
+--- !u!114 &1169070629
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1169070622}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89721163d27d61d4e9f5ab6d75b9edd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rigidBody: {fileID: 1169070630}
+  myCollider: {fileID: 1169070628}
+  hitPoints: 5
+  movementSpeed: 11
+  movementTimer: 1
+  buffMultiplier: 2
+  popForce: 0
+  distanceToGround: 0
+  randOffSetRange: 2
+  randMoveSetRange: 20
+--- !u!54 &1169070630
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1169070622}
+  serializedVersion: 2
+  m_Mass: 0.1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 80
+  m_CollisionDetection: 0
 --- !u!1001 &1175472700
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13616,8 +13655,16 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7825068625078211946, guid: f9159970e5b62ac44a4c0b2cc7d364dd, type: 3}
+      propertyPath: dashForce
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 7825068625078211946, guid: f9159970e5b62ac44a4c0b2cc7d364dd, type: 3}
       propertyPath: jumpForce
       value: 5000
+      objectReference: {fileID: 0}
+    - target: {fileID: 7825068625078211946, guid: f9159970e5b62ac44a4c0b2cc7d364dd, type: 3}
+      propertyPath: dashCooldown
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 7825068625078211946, guid: f9159970e5b62ac44a4c0b2cc7d364dd, type: 3}
       propertyPath: startingSpeed
