@@ -21,16 +21,6 @@ public class GameController : MonoBehaviour
     private GameObject[] grassArray;
     private NpcMovement[] npcs;
 
-
-    /*Bounds bounds = GetComponent<Collider>().bounds;
-    float offsetX = Random.Range(-bounds.extents.x, bounds.extents.x);
-    float offsetY = Random.Range(-bounds.extents.y, bounds.extents.y);
-    float offsetZ = Random.Range(-bounds.extents.z, bounds.extents.z);
-
-    GameObject newHazard = GameObject.Instantiate(hazard);
-    newHazard.transform.position = bounds.center + new Vector3(offsetX, offsetY, offsetZ);*/
-
-
     // Start is called before the first frame update
     void Start()
     {
@@ -89,7 +79,7 @@ public class GameController : MonoBehaviour
         {
             GameObject newFood = GameObject.Instantiate(foodToSpawn);
             newFood.transform.position = bounds.center + randomSpawnPoint();
-            Debug.Log("foodCount: " + foodCount);
+            //Debug.Log("foodCount: " + foodCount);
             --foodCount;
             if (foodCount == 0)
             {

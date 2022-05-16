@@ -26,6 +26,7 @@ public class NpcMovement : MonoBehaviour
     private List<GameObject> foodOnField = new List<GameObject>();
     private List<Transform> transformsToSearch = new List<Transform>();
     private Vector3 closestFood;
+    private Vector3 pointToMoveTo;
     private GameObject[] foodArray;
     private GameController gameController;
     private AudioSource audioSource;
@@ -34,6 +35,7 @@ public class NpcMovement : MonoBehaviour
     public int multiplier;
     public GameObject toDuplicate;
     public GameObject toMutate;
+    public GameObject closestFoodObj;
     public float distanceToGround = 1f;
 
     public bool isGroundedBool = false;
@@ -46,24 +48,19 @@ public class NpcMovement : MonoBehaviour
     public bool foodHasBeenFound = false;
     public bool dead = false;
 
-    Gradient gradient;
-    GradientColorKey[] colorKey;
-    GradientAlphaKey[] alphaKey;
-    Renderer rend;
-
-
     void Start()
     {
         gameController = Object.FindObjectOfType<GameController>();
-        rend = GetComponent<Renderer>();
         audioSource = GetComponent<AudioSource>();
-        
+        closestFoodObj  = new GameObject("empty");
+        closestFoodObj.transform.position = new Vector3(0, 1000000, 0);
         distanceToGround = genericCollider.bounds.extents.y;
     }
 
     void Update()
     {
         distanceToGround = genericCollider.bounds.extents.y;
+        isGroundedBool = isGrounded();
     }
 
     void FixedUpdate()
@@ -77,8 +74,7 @@ public class NpcMovement : MonoBehaviour
         {
             bounds = gameController.bounds;
         }
-        isGroundedBool = isGrounded();
-        if (isGrounded())
+        if (isGroundedBool)
         {
             movementSpeed = groundedSpeed;
         }
@@ -86,7 +82,8 @@ public class NpcMovement : MonoBehaviour
         {
             movementSpeed = maxMovementSpeed;
         }
-        if (!dead) {
+        if (!dead) 
+        {
             if (rigidBody.velocity.magnitude > movementSpeed)
             {
                 rigidBody.velocity = rigidBody.velocity.normalized * movementSpeed;
@@ -99,7 +96,7 @@ public class NpcMovement : MonoBehaviour
             {
                 StartCoroutine(Kill());
             }
-                FindFood();
+            FindFood();
         }
     }
 
@@ -134,47 +131,43 @@ public class NpcMovement : MonoBehaviour
 
     private void FindFood()
     {
+        Vector3 tempVect = new Vector3(0, 1000000, 0);
+
         if (!foodHasBeenFound) {
-            
             foodScriptsOnField = Object.FindObjectsOfType<foodScript>();
             foreach (foodScript script in foodScriptsOnField)
             {
                 foodOnField.Add(script.gameObject);
             }
-            foodArray = foodOnField.ToArray();
         }
         
-        
-        foreach (GameObject obj in foodArray)
+        if (!foodHasBeenFound && gameController.foodTime == true) 
         {
-            transformsToSearch.Add(obj.transform);
-        }
-        Vector3 tempVect = new Vector3(0,1000000,0);
-        if (!foodHasBeenFound && gameController.foodTime == true) {
-            tempVect = GetClosestFood(transformsToSearch.ToArray()).position;
-        }
-        if (tempVect != new Vector3(0, 1000000, 0) && !foodHasBeenFound)
-        {
+            SetClosestFood(foodOnField.ToArray());
             foodHasBeenFound = true;
-            closestFood = tempVect;
+        } 
+        else if (foodHasBeenFound && closestFood != closestFoodObj.transform.position)
+        {
+            SetClosestFood(foodOnField.ToArray());
         }
     }
 
-    Transform GetClosestFood(Transform[] foodArray)
+    void SetClosestFood(GameObject[] foodArray)
     {
-        Transform tMin = null;
+        GameObject tMin = null;
         float minDist = Mathf.Infinity;
         Vector3 currentPos = transform.position;
-        foreach (Transform f in foodArray)
+        foreach (GameObject f in foodArray)
         {
-            float dist = Vector3.Distance(f.position, currentPos);
+            float dist = Vector3.Distance(f.transform.position, currentPos);
             if (dist < minDist)
             {
                 tMin = f;
                 minDist = dist;
+                Debug.Log("lower: " + minDist);
             }
         }
-        return tMin;
+        closestFoodObj = tMin;
     }
 
     bool isGrounded()
@@ -212,9 +205,10 @@ public class NpcMovement : MonoBehaviour
             }
 
             if (foodScriptsOnField.Length >= 1 && eating == false && gameController.foodTime == true) {
-                transform.LookAt(closestFood);
-
-                StartCoroutine(DoMove(closestFood - transform.position * 1.5f));
+                pointToMoveTo = closestFoodObj.transform.position;
+                pointToMoveTo.y = transform.position.y;
+                transform.LookAt(pointToMoveTo);
+                StartCoroutine(DoMove(pointToMoveTo - transform.position));
             } else {
                 StartCoroutine(DoMove(randomPoint()));
             }
@@ -224,7 +218,6 @@ public class NpcMovement : MonoBehaviour
 
     IEnumerator DoMove(Vector3 point)
     {
-
         float duration = moveDuration;
         float normalizedTime = 0;
 

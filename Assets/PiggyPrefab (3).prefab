@@ -130,7 +130,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hitPoints: 5
-  movementSpeed: 0
+  movementSpeed: 3
   groundedSpeed: 2
   maxMovementSpeed: 6
   buffMultiplier: 1.5
@@ -156,6 +156,7 @@ MonoBehaviour:
   multiplier: 1
   toDuplicate: {fileID: 7297764394128168098}
   toMutate: {fileID: 885119496229302406, guid: d98f6469155da59449c3d67af81c75d1, type: 3}
+  closestFoodObj: {fileID: 0}
   distanceToGround: 0
   isGroundedBool: 0
   inPool: 0
