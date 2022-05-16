@@ -14,10 +14,12 @@ public class GameController : MonoBehaviour
     public PlayerMovement player;
     public InputManagerScript inputManager;
     public GameObject foodToSpawn;
+    public Collider boundsBox;
 
-    private Bounds bounds;
+    public Bounds bounds;
     private GameObject[] pools;
     private GameObject[] grassArray;
+    private NpcMovement[] npcs;
 
 
     /*Bounds bounds = GetComponent<Collider>().bounds;
@@ -39,7 +41,11 @@ public class GameController : MonoBehaviour
         player.dashCooldown = dashCooldown;
         inputManager = FindObjectOfType<InputManagerScript>();
         inputManager.rollCooldown = dashDuration + dashCooldown;
-        bounds = GetComponent<Collider>().bounds;
+        boundsBox = GetComponent<Collider>();
+        bounds = boundsBox.bounds;
+        if (bounds == boundsBox.bounds) {
+            boundsBox.enabled = false;
+        }
         pools = GameObject.FindGameObjectsWithTag("Pool");
         grassArray = GameObject.FindGameObjectsWithTag("Grass");
     }
@@ -77,6 +83,7 @@ public class GameController : MonoBehaviour
             //Debug.Log("normalizedTime:" + normalizedTime);
             yield return null;
         }
+        
         Debug.Log("-----------FOOD TIME!--------------");
         while (foodCount > 0)
         {
@@ -86,6 +93,13 @@ public class GameController : MonoBehaviour
             --foodCount;
             if (foodCount == 0)
             {
+                npcs = Object.FindObjectsOfType<NpcMovement>();
+                foreach (NpcMovement script in npcs)
+                {
+                    script.inGrass = false;
+                    script.inPool = false;
+                    script.gettingReadyToMove = false;
+                }
                 foreach (GameObject pool in pools)
                 {
                     Destroy(pool);

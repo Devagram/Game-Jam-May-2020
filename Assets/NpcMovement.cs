@@ -5,10 +5,12 @@ using UnityEngine;
 public class NpcMovement : MonoBehaviour
 {
     public float hitPoints;
-    //public float movementAcceleration;
     public float movementSpeed;
+    public float groundedSpeed;
+    public float maxMovementSpeed;
     public float buffMultiplier;
     public float movementTimer;
+    public float moveDuration;
     public float popForce;
     public float offSet;
     public float randOffSetRange;
@@ -18,29 +20,31 @@ public class NpcMovement : MonoBehaviour
     public float despawnDelay;
     public Rigidbody rigidBody;
     public Collider genericCollider;
-    public Material objMaterial;
+    public AudioClip[] popSounds;
+    public AudioClip[] hitSounds;
     private foodScript[] foodScriptsOnField;
     private List<GameObject> foodOnField = new List<GameObject>();
     private List<Transform> transformsToSearch = new List<Transform>();
     private Vector3 closestFood;
     private GameObject[] foodArray;
     private GameController gameController;
+    private AudioSource audioSource;
+    private Bounds bounds;
 
     public int multiplier;
     public GameObject toDuplicate;
     public GameObject toMutate;
-    public float distanceToGround;
+    public float distanceToGround = 1f;
 
     public bool isGroundedBool = false;
 
-    bool inPool = false;
-    bool spawned = false;
-    bool inGrass = false;
-    bool eating = false;
-    bool gettingReadyToMove = false;
-    bool foodHasBeenFound = false;
-    bool dead = false;
-
+    public bool inPool = false;
+    public bool spawned = false;
+    public bool inGrass = false;
+    public bool eating = false;
+    public bool gettingReadyToMove = false;
+    public bool foodHasBeenFound = false;
+    public bool dead = false;
 
     Gradient gradient;
     GradientColorKey[] colorKey;
@@ -48,49 +52,64 @@ public class NpcMovement : MonoBehaviour
     Renderer rend;
 
 
-    // Start is called before the first frame update
     void Start()
     {
         gameController = Object.FindObjectOfType<GameController>();
         rend = GetComponent<Renderer>();
+        audioSource = GetComponent<AudioSource>();
+        
         distanceToGround = genericCollider.bounds.extents.y;
     }
 
-    // Update is called once per frame
     void Update()
     {
-       if (spawned == false)
-       {
-            spawned = true;
-            rigidBody.AddForce(transform.up * popForce);
-       }
+        distanceToGround = genericCollider.bounds.extents.y;
     }
 
     void FixedUpdate()
     {
+        if (spawned == false)
+        {
+            spawned = true;
+            rigidBody.AddForce(transform.up * popForce);
+        }
+        if (bounds != gameController.bounds)
+        {
+            bounds = gameController.bounds;
+        }
         isGroundedBool = isGrounded();
+        if (isGrounded())
+        {
+            movementSpeed = groundedSpeed;
+        }
+        else
+        {
+            movementSpeed = maxMovementSpeed;
+        }
         if (!dead) {
-            
-            //Debug.Log("am i grounded?: " + isGrounded());
-            Debug.Log("am i grounded?: " + isGrounded());
-            if (isGrounded()) {
-                if (rigidBody.velocity.magnitude > movementSpeed)
-                {
-                    rigidBody.velocity = rigidBody.velocity.normalized * movementSpeed;
-                }
+            if (rigidBody.velocity.magnitude > movementSpeed)
+            {
+                rigidBody.velocity = rigidBody.velocity.normalized * movementSpeed;
             }
-
-            FindFood();
             if (inPool == false && gettingReadyToMove == false)
             {
-                //wDebug.Log("started coroutine for movement");
                 StartCoroutine(RandomMovement());
             }
             if (hitPoints <= 0)
             {
                 StartCoroutine(Kill());
             }
+                FindFood();
         }
+    }
+
+    public void Damage(float damageToTake)
+    {
+        float pitchValue = .75f;
+        pitchValue = Random.Range(.75f, 2);
+        audioSource.pitch = pitchValue;
+        audioSource.PlayOneShot(hitSounds[Random.Range(0, popSounds.Length)]);
+        hitPoints -= damageToTake;
     }
 
     private IEnumerator Kill()
@@ -100,7 +119,7 @@ public class NpcMovement : MonoBehaviour
         float normalizedTime = 0;
 
         dead = true;
-        npcRot.y -= 180; //subtract 90 degrees from its looking angle
+        npcRot.y -= 180;
         transform.localRotation = npcRot;
         rigidBody.freezeRotation = false;
         rigidBody.AddForce(transform.up * popForce * 2);
@@ -115,7 +134,8 @@ public class NpcMovement : MonoBehaviour
 
     private void FindFood()
     {
-        if (!foodHasBeenFound) { 
+        if (!foodHasBeenFound) {
+            
             foodScriptsOnField = Object.FindObjectsOfType<foodScript>();
             foreach (foodScript script in foodScriptsOnField)
             {
@@ -159,7 +179,7 @@ public class NpcMovement : MonoBehaviour
 
     bool isGrounded()
     {
-        return Physics.Raycast(transform.position, -Vector3.up, distanceToGround + 0.1f);
+        return Physics.Raycast(transform.position, -Vector3.up, distanceToGround + .1f);
     }
 
     private IEnumerator RandomMovement()
@@ -167,65 +187,62 @@ public class NpcMovement : MonoBehaviour
         float duration = movementTimer;
         float normalizedTime = 0;
         float randToMove;
-        //float randToMoveWO;
-        Vector3 forceToMove;
+
+        Vector3 forceToMove = new Vector3();
         gettingReadyToMove = true;
         while (normalizedTime <= 1f)
         {
             normalizedTime += Time.deltaTime / duration;
-            //Debug.Log("normalizedTime:" + normalizedTime);
             yield return null;
         }
         gettingReadyToMove = false;
-        //Debug.Log(inPool);
         if (isGrounded() && inPool == false)
         {
-            //Debug.Log("buffMultiplier: " + buffMultiplier);
             randToMove = Random.Range(-randMoveSetRange - 1, randMoveSetRange + 1);
-            randToMove *= buffMultiplier;
-
-
-            Quaternion npcRot = transform.localRotation; //temp variable to store the current rotation
-
-            
-
+            Quaternion npcRot = transform.localRotation;
 
             if (Random.Range(-1, 1) >= 0)
             {
-                //Debug.Log("Applying force on right: " + randToMove + " Without multiplier:" + randToMoveWO);
-                forceToMove = transform.right * randToMove;
-                npcRot.y -= 90; //subtract 90 degrees from its looking angle
-                transform.localRotation = npcRot; //apply the updated rotaton
+                forceToMove.x = transform.position.x + randToMove;
+                forceToMove.z = transform.position.z;
+            } else {
+                
+                forceToMove.x = transform.position.x;
+                forceToMove.z = transform.position.z + randToMove;
             }
-            else
-            {
-                //Debug.Log("Applying force on forward: " + randToMove + " Without multiplier:" + randToMoveWO);
-                forceToMove = transform.forward * randToMove;
-            }
+
             if (foodScriptsOnField.Length >= 1 && eating == false && gameController.foodTime == true) {
                 transform.LookAt(closestFood);
-                Debug.Log("numbers: " + (closestFood - transform.position));
-                forceToMove = (closestFood - transform.position);
-                if (forceToMove.x > 15 || forceToMove.y > 15) {
-                    rigidBody.AddForce(forceToMove/6);
-                }
-                else if (forceToMove.x <= 15 && forceToMove.x > 8 || forceToMove.y <= 15 && forceToMove.y > 8)
-                {
-                    rigidBody.AddForce(forceToMove/4);
-                }
-                else if (forceToMove.x <= 8 && forceToMove.x > 4 || forceToMove.y <= 8 && forceToMove.y > 4)
-                {
-                    rigidBody.AddForce(forceToMove/2);
-                } else
-                {
-                    rigidBody.AddForce(forceToMove);
-                }
-            } 
-            else {
-                rigidBody.AddForce(forceToMove);
+
+                StartCoroutine(DoMove(closestFood - transform.position * 1.5f));
+            } else {
+                StartCoroutine(DoMove(randomPoint()));
             }
             
         }
+    }
+
+    IEnumerator DoMove(Vector3 point)
+    {
+
+        float duration = moveDuration;
+        float normalizedTime = 0;
+
+        while (normalizedTime <= 1f)
+        {
+            normalizedTime += Time.deltaTime / duration;
+            rigidBody.MovePosition(transform.position + point * Time.deltaTime * movementSpeed);
+            yield return null;
+        }
+    }
+
+    Vector3 randomPoint()
+    {
+        float offsetX = Random.Range(-bounds.extents.x, bounds.extents.x);
+        float offsetZ = Random.Range(-bounds.extents.z, bounds.extents.z);
+        Vector3 point = bounds.center + new Vector3(offsetX, 0, offsetZ);
+        point.y = transform.position.y;
+        return point;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -233,39 +250,26 @@ public class NpcMovement : MonoBehaviour
         if (!dead)
         {
             GameObject collidingWith = other.gameObject;
-            //Debug.Log("entering: " + collidingWith.tag);
             if (collidingWith.tag == "Pool")
             {
                 inPool = true;
-                //start timer to multiplication
-                //Debug.Log("in if: " + collidingWith.tag);
-                rigidBody.velocity = new Vector3(0, 0, 0);
-                StartCoroutine(Countdown());
+                rigidBody.velocity = rigidBody.velocity / 4;
+                StartCoroutine(CountdownToPop());
 
             }
             else if (collidingWith.tag == "Grass")
             {
                 inGrass = true;
                 rigidBody.velocity = rigidBody.velocity / 2;
-                rend.material.color = Color.green;
-                //start timer to multiplication
-                //Debug.Log("in if: " + collidingWith.tag);
                 StartCoroutine(Satisfied());
 
             }
             else if (collidingWith.tag == "Food")
             {
-                //eating = true;
-                //Eatfood
                 Instantiate(toMutate,transform.position,transform.rotation);
                 Destroy(this.gameObject);
             }
         }
-    }
-
-    public void Damage(float damageToTake)
-    {
-        hitPoints -= damageToTake;
     }
 
     private void OnTriggerExit(Collider other)
@@ -273,19 +277,17 @@ public class NpcMovement : MonoBehaviour
         if (!dead)
         {
             GameObject collidingWith = other.gameObject;
-            //Debug.Log("exiting: " + collidingWith.tag);
             if (collidingWith.tag == "Pool")
             {
                 inPool = false;
-                rend.material.color = Color.white;
             }
             else if (collidingWith.tag == "Grass")
             {
                 inGrass = false;
-                rend.material.color = Color.white;
             }
         }
     }
+
     private IEnumerator Satisfied()
     {
         float duration = grassSatisfactionTime;
@@ -295,57 +297,32 @@ public class NpcMovement : MonoBehaviour
         {
             if (inGrass == true)
             {
-                rend.material.color = Color.blue;
                 buffMultiplier = .5f;
-                //Debug.Log("buffMultiplier: " + buffMultiplier);
             }
             normalizedTime += Time.deltaTime / duration;
             yield return null;
         }
         buffMultiplier = 1f;
-        rend.material.color = Color.white;
     }
 
-    private IEnumerator Countdown()
+    private IEnumerator CountdownToPop()
     {
         float duration = poolCastTime;
         float normalizedTime = 0;
+        float pitchValue = 2.0f;
+        pitchValue = Random.Range(.5f, 2);
+        audioSource.pitch = pitchValue;
         while (normalizedTime <= 1f)
         {
             normalizedTime += Time.deltaTime / duration;
-            if (inPool == true)
-            {
-                gradient = new Gradient();
-
-                // Populate the color keys at the relative time 0 and 1 (0 and 100%)
-                colorKey = new GradientColorKey[2];
-                colorKey[0].color = Color.white;
-                colorKey[0].time = 0.0f;
-                colorKey[1].color = Color.red;
-                colorKey[1].time = 1.0f;
-
-                // Populate the alpha  keys at relative time 0 and 1  (0 and 100%)
-                alphaKey = new GradientAlphaKey[2];
-                alphaKey[0].alpha = 1.0f;
-                alphaKey[0].time = 0.0f;
-                alphaKey[1].alpha = 0.0f;
-                alphaKey[1].time = 1.0f;
-
-                gradient.SetKeys(colorKey, alphaKey);
-
-                // What's the color at the relative time 0.25 (25 %) ?
-
-                rend.material.color = gradient.Evaluate(normalizedTime);
-                //Debug.Log(gradient.Evaluate(0.25f));
-            }
             yield return null;
         }
         if (inPool == true && !dead)
         {
+            audioSource.PlayOneShot(popSounds[Random.Range(0,popSounds.Length)]);
             for (int i = 0; i < multiplier; i++)
             {
-                //Debug.Log("in forloop: " + i);
-                Instantiate(toDuplicate, new Vector3(transform.position.x + Random.Range(0f, randOffSetRange), offSet, transform.position.z), transform.rotation);
+                Instantiate(toDuplicate, new Vector3(transform.position.x + Random.Range(-randOffSetRange, randOffSetRange), offSet + Random.Range(0, randOffSetRange), transform.position.z + Random.Range(-randOffSetRange, randOffSetRange)), transform.rotation);
                 rigidBody.AddForce(transform.up * popForce);
             }
         }

@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 240910981784392484}
   - component: {fileID: 7297764394128168100}
   - component: {fileID: 7018523215249910488}
+  - component: {fileID: 8094479905178931681}
   m_Layer: 0
   m_Name: PiggyPrefab (3)
   m_TagString: hittable
@@ -98,8 +99,8 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.7774929
-  m_Center: {x: 0, y: -0.07084823, z: 0.10240871}
+  m_Radius: 0.7996006
+  m_Center: {x: 0, y: -0.09295595, z: 0.10240871}
 --- !u!54 &7297764394128168100
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -129,24 +130,137 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hitPoints: 5
-  movementSpeed: 11
+  movementSpeed: 0
+  groundedSpeed: 2
+  maxMovementSpeed: 6
   buffMultiplier: 1.5
-  movementTimer: 3
+  movementTimer: 5
+  moveDuration: 2
   popForce: 3
   offSet: 1
   randOffSetRange: 2
   randMoveSetRange: 2
-  poolCastTime: 5
+  poolCastTime: 1
   grassSatisfactionTime: 6
   despawnDelay: 5
   rigidBody: {fileID: 7297764394128168100}
   genericCollider: {fileID: 240910981784392484}
-  objMaterial: {fileID: 0}
+  popSounds:
+  - {fileID: 8300000, guid: b36fb033fd0c7e74c95c2e5d0bdeb2e5, type: 3}
+  - {fileID: 8300000, guid: 2e35449f24d2b4a4da0bd5f5e529974a, type: 3}
+  - {fileID: 8300000, guid: 72b403afe8ed35341b99d478c19ff94b, type: 3}
+  hitSounds:
+  - {fileID: 8300000, guid: e79778487716d684aa0a767b917fee3b, type: 3}
+  - {fileID: 8300000, guid: 32627634576c94e41956ae4a16336df0, type: 3}
+  - {fileID: 8300000, guid: 03077cd7606f8df49857a7e6cc4127ca, type: 3}
   multiplier: 1
   toDuplicate: {fileID: 7297764394128168098}
   toMutate: {fileID: 885119496229302406, guid: d98f6469155da59449c3d67af81c75d1, type: 3}
   distanceToGround: 0
   isGroundedBool: 0
+  inPool: 0
+  spawned: 0
+  inGrass: 0
+  eating: 0
+  gettingReadyToMove: 0
+  foodHasBeenFound: 0
+  dead: 0
+--- !u!82 &8094479905178931681
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7297764394128168098}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1001 &5140212192714557308
 PrefabInstance:
   m_ObjectHideFlags: 0

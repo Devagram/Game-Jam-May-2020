@@ -19,8 +19,13 @@ public class PlayerMovement : MonoBehaviour
     public Rigidbody rigidBody;
     public Collider capCollider;
     public Collider attackHitBox;
-    public float attackDuration;
     
+    public float attackDuration;
+
+    private AudioSource audioSource;
+    public AudioClip hitSound;
+
+
     public float dashDuration;
     public float dashCooldown;
 
@@ -39,6 +44,7 @@ public class PlayerMovement : MonoBehaviour
     {
         movementSpeed = startingSpeed;
         Cursor.lockState = CursorLockMode.Confined;
+        audioSource = GetComponent<AudioSource>();
         distanceToGround = capCollider.bounds.extents.y;
     }
 
@@ -126,9 +132,11 @@ public class PlayerMovement : MonoBehaviour
         NpcMovement npcCollidedWith;
         HostileNPC hostileCollidedWith;
         //Debug.Log("test: " + collidingWith.tag);
+        audioSource.clip = hitSound;
 
         if (collidingWith.tag == "hittable")
         {
+            audioSource.PlayOneShot(hitSound);
             npcCollidedWith = collidingWith.gameObject.GetComponent<NpcMovement>();
             rigidBodyIntersected.AddForce(transform.forward * 5);
             npcCollidedWith.Damage(attackDamage);
@@ -137,6 +145,7 @@ public class PlayerMovement : MonoBehaviour
         {
             hostileCollidedWith = collidingWith.gameObject.GetComponent<HostileNPC>();
             //rigidBodyIntersected.AddForce(transform.forward * 15);
+            audioSource.PlayOneShot(hitSound);
             hostileCollidedWith.Damage(attackDamage);
             rigidBody.AddForce(transform.forward * -100);
         }
