@@ -15,8 +15,9 @@ public class NpcMovement : MonoBehaviour
     public float randMoveSetRange;
     public float poolCastTime;
     public float grassSatisfactionTime;
+    public float despawnDelay;
     public Rigidbody rigidBody;
-    public Collider capCollider;
+    public Collider genericCollider;
     public Material objMaterial;
     private foodScript[] foodScriptsOnField;
     private List<GameObject> foodOnField = new List<GameObject>();
@@ -27,13 +28,18 @@ public class NpcMovement : MonoBehaviour
 
     public int multiplier;
     public GameObject toDuplicate;
+    public GameObject toMutate;
     public float distanceToGround;
 
+    public bool isGroundedBool = false;
+
     bool inPool = false;
+    bool spawned = false;
     bool inGrass = false;
     bool eating = false;
     bool gettingReadyToMove = false;
     bool foodHasBeenFound = false;
+    bool dead = false;
 
 
     Gradient gradient;
@@ -47,37 +53,64 @@ public class NpcMovement : MonoBehaviour
     {
         gameController = Object.FindObjectOfType<GameController>();
         rend = GetComponent<Renderer>();
-        rigidBody.AddForce(transform.up * popForce);
-        distanceToGround = capCollider.bounds.extents.y;
+        distanceToGround = genericCollider.bounds.extents.y;
     }
 
     // Update is called once per frame
     void Update()
     {
-       
+       if (spawned == false)
+       {
+            spawned = true;
+            rigidBody.AddForce(transform.up * popForce);
+       }
     }
 
     void FixedUpdate()
     {
-        //Debug.Log("am i grounded?: " + isGrounded());
-        //Debug.Log("am i grounded?: " + isGrounded());
-        if (isGrounded()) {
-            if (rigidBody.velocity.magnitude > movementSpeed)
+        isGroundedBool = isGrounded();
+        if (!dead) {
+            
+            //Debug.Log("am i grounded?: " + isGrounded());
+            Debug.Log("am i grounded?: " + isGrounded());
+            if (isGrounded()) {
+                if (rigidBody.velocity.magnitude > movementSpeed)
+                {
+                    rigidBody.velocity = rigidBody.velocity.normalized * movementSpeed;
+                }
+            }
+
+            FindFood();
+            if (inPool == false && gettingReadyToMove == false)
             {
-                rigidBody.velocity = rigidBody.velocity.normalized * movementSpeed;
+                //wDebug.Log("started coroutine for movement");
+                StartCoroutine(RandomMovement());
+            }
+            if (hitPoints <= 0)
+            {
+                StartCoroutine(Kill());
             }
         }
-        
-        FindFood();
-        if (inPool == false && gettingReadyToMove == false)
+    }
+
+    private IEnumerator Kill()
+    {
+        Quaternion npcRot = transform.localRotation;
+        float duration = despawnDelay;
+        float normalizedTime = 0;
+
+        dead = true;
+        npcRot.y -= 180; //subtract 90 degrees from its looking angle
+        transform.localRotation = npcRot;
+        rigidBody.freezeRotation = false;
+        rigidBody.AddForce(transform.up * popForce * 2);
+        while (normalizedTime <= 1f)
         {
-            //wDebug.Log("started coroutine for movement");
-            StartCoroutine(RandomMovement());
+            
+            normalizedTime += Time.deltaTime / duration;
+            yield return null;
         }
-        if (hitPoints <= 0)
-        {
-            Destroy(this.gameObject);
-        }
+        Destroy(this.gameObject);
     }
 
     private void FindFood()
@@ -151,10 +184,18 @@ public class NpcMovement : MonoBehaviour
             randToMove = Random.Range(-randMoveSetRange - 1, randMoveSetRange + 1);
             randToMove *= buffMultiplier;
 
+
+            Quaternion npcRot = transform.localRotation; //temp variable to store the current rotation
+
+            
+
+
             if (Random.Range(-1, 1) >= 0)
             {
                 //Debug.Log("Applying force on right: " + randToMove + " Without multiplier:" + randToMoveWO);
                 forceToMove = transform.right * randToMove;
+                npcRot.y -= 90; //subtract 90 degrees from its looking angle
+                transform.localRotation = npcRot; //apply the updated rotaton
             }
             else
             {
@@ -162,6 +203,7 @@ public class NpcMovement : MonoBehaviour
                 forceToMove = transform.forward * randToMove;
             }
             if (foodScriptsOnField.Length >= 1 && eating == false && gameController.foodTime == true) {
+                transform.LookAt(closestFood);
                 Debug.Log("numbers: " + (closestFood - transform.position));
                 forceToMove = (closestFood - transform.position);
                 if (forceToMove.x > 15 || forceToMove.y > 15) {
@@ -188,29 +230,36 @@ public class NpcMovement : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        GameObject collidingWith = other.gameObject;
-        //Debug.Log("entering: " + collidingWith.tag);
-        if (collidingWith.tag == "Pool")
+        if (!dead)
         {
-            inPool = true;
-            //start timer to multiplication
-            //Debug.Log("in if: " + collidingWith.tag);
-            rigidBody.velocity = new Vector3(0,0,0);
-            StartCoroutine(Countdown());
+            GameObject collidingWith = other.gameObject;
+            //Debug.Log("entering: " + collidingWith.tag);
+            if (collidingWith.tag == "Pool")
+            {
+                inPool = true;
+                //start timer to multiplication
+                //Debug.Log("in if: " + collidingWith.tag);
+                rigidBody.velocity = new Vector3(0, 0, 0);
+                StartCoroutine(Countdown());
 
-        } else if (collidingWith.tag == "Grass")
-        {
-            inGrass = true;
-            rigidBody.velocity = rigidBody.velocity / 2;
-            rend.material.color = Color.green;
-            //start timer to multiplication
-            //Debug.Log("in if: " + collidingWith.tag);
-            StartCoroutine(Satisfied());
+            }
+            else if (collidingWith.tag == "Grass")
+            {
+                inGrass = true;
+                rigidBody.velocity = rigidBody.velocity / 2;
+                rend.material.color = Color.green;
+                //start timer to multiplication
+                //Debug.Log("in if: " + collidingWith.tag);
+                StartCoroutine(Satisfied());
 
-        } else if (collidingWith.tag == "Food")
-        {
-            //eating = true;
-            //Eatfood
+            }
+            else if (collidingWith.tag == "Food")
+            {
+                //eating = true;
+                //Eatfood
+                Instantiate(toMutate,transform.position,transform.rotation);
+                Destroy(this.gameObject);
+            }
         }
     }
 
@@ -221,17 +270,20 @@ public class NpcMovement : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        GameObject collidingWith = other.gameObject;
-        //Debug.Log("exiting: " + collidingWith.tag);
-        if (collidingWith.tag == "Pool")
+        if (!dead)
         {
-            inPool = false;
-            rend.material.color = Color.white;
-        }
-        else if (collidingWith.tag == "Grass")
-        {
-            inGrass = false;
-            rend.material.color = Color.white;
+            GameObject collidingWith = other.gameObject;
+            //Debug.Log("exiting: " + collidingWith.tag);
+            if (collidingWith.tag == "Pool")
+            {
+                inPool = false;
+                rend.material.color = Color.white;
+            }
+            else if (collidingWith.tag == "Grass")
+            {
+                inGrass = false;
+                rend.material.color = Color.white;
+            }
         }
     }
     private IEnumerator Satisfied()
@@ -288,7 +340,7 @@ public class NpcMovement : MonoBehaviour
             }
             yield return null;
         }
-        if (inPool == true)
+        if (inPool == true && !dead)
         {
             for (int i = 0; i < multiplier; i++)
             {

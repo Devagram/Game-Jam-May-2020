@@ -7,6 +7,10 @@ public class InputManagerScript : MonoBehaviour
 
     private Animator anim;
 
+    public float rollCooldown;
+
+    bool inRoll = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -38,9 +42,25 @@ public class InputManagerScript : MonoBehaviour
             anim.ResetTrigger("wack");
         }
 
-        if (Input.GetButton("Jump"))
+        if (Input.GetButtonDown("Jump") && !inRoll)
         {
+            inRoll = true;
+            StartCoroutine(RollCooldown());
             anim.Play("Roll");
         }
+    }
+
+    private IEnumerator RollCooldown()
+    {
+        float duration = rollCooldown;
+        float normalizedTime = 0;
+
+        while (normalizedTime <= 1f)
+        {
+            ;
+            normalizedTime += Time.deltaTime / duration;
+            yield return null;
+        }
+        inRoll = false;
     }
 }

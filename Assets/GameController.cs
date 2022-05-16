@@ -5,10 +5,14 @@ using UnityEngine;
 public class GameController : MonoBehaviour
 {
     public float timeToFeedDrop;
+    public float dashDuration;
+    public float dashCooldown;
     public bool gameStart = false;
     public bool foodTime = false;
     public int foodCount = 1;
     public float fallTime = 3;
+    public PlayerMovement player;
+    public InputManagerScript inputManager;
     public GameObject foodToSpawn;
 
     private Bounds bounds;
@@ -30,6 +34,11 @@ public class GameController : MonoBehaviour
     {
         foodTime = false;
         StartCoroutine(CountDownToFeedDrop());
+        player = FindObjectOfType<PlayerMovement>();
+        player.dashDuration = dashDuration;
+        player.dashCooldown = dashCooldown;
+        inputManager = FindObjectOfType<InputManagerScript>();
+        inputManager.rollCooldown = dashDuration + dashCooldown;
         bounds = GetComponent<Collider>().bounds;
         pools = GameObject.FindGameObjectsWithTag("Pool");
         grassArray = GameObject.FindGameObjectsWithTag("Grass");

@@ -56,13 +56,18 @@ public class HostileNPC : MonoBehaviour
 
         if (hitPoints <= 0)
         {
-            Destroy(this.gameObject);
+            Destroy(gameObject);
         }
     }
 
     bool isGrounded()
     {
         return Physics.Raycast(transform.position, -Vector3.up, distanceToGround + 0.1f);
+    }
+
+    public void Damage(float damageToTake)
+    {
+        hitPoints -= damageToTake;
     }
 
     private IEnumerator RandomMovement()
