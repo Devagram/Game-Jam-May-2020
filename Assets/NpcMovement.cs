@@ -164,7 +164,7 @@ public class NpcMovement : MonoBehaviour
             {
                 tMin = f;
                 minDist = dist;
-                Debug.Log("lower: " + minDist);
+                //Debug.Log("lower: " + minDist);
             }
         }
         closestFoodObj = tMin;
@@ -210,7 +210,7 @@ public class NpcMovement : MonoBehaviour
                 transform.LookAt(pointToMoveTo);
                 StartCoroutine(DoMove(pointToMoveTo - transform.position));
             } else {
-                StartCoroutine(DoMove(randomPoint()));
+                StartCoroutine(DoMove(randomPoint() - transform.position));
             }
             
         }

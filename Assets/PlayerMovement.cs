@@ -4,11 +4,6 @@ using UnityEngine;
 
 
 
-//TODO ATTACKING
-
-
-
-
 public class PlayerMovement : MonoBehaviour
 {
     public float movementAcceleration;
@@ -19,27 +14,18 @@ public class PlayerMovement : MonoBehaviour
     public Rigidbody rigidBody;
     public Collider capCollider;
     public Collider attackHitBox;
-    
     public float attackDuration;
-
     private AudioSource audioSource;
     public AudioClip hitSound;
-
-
     public float dashDuration;
     public float dashCooldown;
-
     public float distanceToGround;
-
-
     public bool movingForward = false;
     public bool trueW = false;
     public bool playerLocked = false;
     public bool inDash = false;
 
 
-
-    // Start is called before the first frame update
     void Start()
     {
         movementSpeed = startingSpeed;
@@ -53,7 +39,6 @@ public class PlayerMovement : MonoBehaviour
         return Physics.Raycast(transform.position, -Vector3.up, distanceToGround + 0.1f);
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (Cursor.lockState != CursorLockMode.Confined)
@@ -69,7 +54,6 @@ public class PlayerMovement : MonoBehaviour
 
             if (Input.GetButtonDown("Up"))
             {
-                //Debug.Log("Forward button pushed");
                 movingForward = true;
                 trueW = true;
             }
@@ -83,7 +67,6 @@ public class PlayerMovement : MonoBehaviour
         }
         if (Input.GetButtonUp("Up"))
         {
-            //Debug.Log("Forward button released");
             movingForward = false;
             trueW = false;
         }
@@ -103,7 +86,6 @@ public class PlayerMovement : MonoBehaviour
         
         while (normalizedTime <= 1f)
         {
-            
             rigidBody.AddForce(transform.forward * dashForce);
             normalizedTime += Time.deltaTime / duration;
             yield return null;
@@ -118,7 +100,7 @@ public class PlayerMovement : MonoBehaviour
         float normalizedTime = 0;
 
         while (normalizedTime <= 1f)
-        {;
+        {
             normalizedTime += Time.deltaTime / duration;
             yield return null;
         }
@@ -131,7 +113,6 @@ public class PlayerMovement : MonoBehaviour
         Rigidbody rigidBodyIntersected = collidingWith.gameObject.GetComponent<Rigidbody>();
         NpcMovement npcCollidedWith;
         HostileNPC hostileCollidedWith;
-        //Debug.Log("test: " + collidingWith.tag);
         audioSource.clip = hitSound;
 
         if (collidingWith.tag == "hittable")
@@ -144,7 +125,6 @@ public class PlayerMovement : MonoBehaviour
         }else if (collidingWith.tag == "BadGuy")
         {
             hostileCollidedWith = collidingWith.gameObject.GetComponent<HostileNPC>();
-            //rigidBodyIntersected.AddForce(transform.forward * 15);
             audioSource.PlayOneShot(hitSound);
             hostileCollidedWith.Damage(attackDamage);
             rigidBody.AddForce(transform.forward * -100);
@@ -188,7 +168,9 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        //Debug.Log("Grounded = " + isGrounded());
+        RaycastHit hit;
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
         if (isGrounded())
         {
             if (rigidBody.velocity.magnitude > movementSpeed)
@@ -196,9 +178,6 @@ public class PlayerMovement : MonoBehaviour
                 rigidBody.velocity = rigidBody.velocity.normalized * movementSpeed;
             }
         }
-        RaycastHit hit;
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
 
         if (Physics.Raycast(ray, out hit, 100))
         {

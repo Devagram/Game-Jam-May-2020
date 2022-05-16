@@ -113,12 +113,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rigidBody: {fileID: 885119496229302462}
   myCollider: {fileID: 885119496229302460}
+  player: {fileID: 0}
   hitPoints: 5
-  movementSpeed: 11
-  movementTimer: 1
+  movementSpeed: 1
+  movementTimer: 5
   buffMultiplier: 2
-  popForce: 0
+  popForce: 10
+  jumpForce: 0.5
+  attackRate: 6
+  coolDown: 3
+  gettingReadyToMove: 0
   distanceToGround: 0
+  inPool: 0
+  inAttack: 0
   randOffSetRange: 2
   randMoveSetRange: 20
 --- !u!54 &885119496229302462

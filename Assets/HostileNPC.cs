@@ -7,14 +7,19 @@ public class HostileNPC : MonoBehaviour
     
     public Rigidbody rigidBody;
     public Collider myCollider;
+    public PlayerMovement player;
     public float hitPoints;
     public float movementSpeed;
     public float movementTimer;
     public float buffMultiplier;
     public float popForce;
-    bool gettingReadyToMove = false;
+    public float jumpForce;
+    public float attackRate;
+    public float coolDown;
+    public bool gettingReadyToMove = false;
     public float distanceToGround;
-    bool inPool = false;
+    public bool inPool = false;
+    public bool inAttack = false;
     
 
     public float randOffSetRange;
@@ -25,19 +30,25 @@ public class HostileNPC : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        player = Object.FindObjectOfType<PlayerMovement>();
+        rigidBody = GetComponent<Rigidbody>();
         distanceToGround = myCollider.bounds.extents.y;
         rigidBody.AddForce(transform.up * popForce);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+        //rigidBody.AddForce(transform.up * popForce);
+        if (!inAttack)
+        {
+            Attack();
+        }
     }
+
 
     void FixedUpdate()
     {
-        //Debug.Log("am i grounded?: " + isGrounded());
+        
         if (isGrounded())
         {
             if (rigidBody.velocity.magnitude > movementSpeed)
@@ -47,12 +58,10 @@ public class HostileNPC : MonoBehaviour
             
         }
 
-        if (inPool == false && gettingReadyToMove == false)
+       /* if (inPool == false && gettingReadyToMove == false)
         {
-            //wDebug.Log("started coroutine for movement");
-            StartCoroutine(RandomMovement());
-        }
-
+            //StartCoroutine(RandomMovement());
+        }*/
 
         if (hitPoints <= 0)
         {
@@ -70,43 +79,55 @@ public class HostileNPC : MonoBehaviour
         hitPoints -= damageToTake;
     }
 
-    private IEnumerator RandomMovement()
+    public void Attack()
     {
-        float duration = movementTimer;
+        //Debug.Log("player.gameObject.gameObject.transform.position: " + player.transform.position);
+        Vector3 attackPoint = new Vector3(player.gameObject.gameObject.transform.position.x - transform.position.x, transform.position.y, player.gameObject.gameObject.transform.position.z - transform.position.z);
+        //attackPoint = player.transform.position - attackPoint;
+        StartCoroutine(DoAttack(attackPoint));
+    }
+
+    IEnumerator DoAttack(Vector3 point)
+    {
+        float duration = attackRate/3;
         float normalizedTime = 0;
-        float randToMove;
-        //float randToMoveWO;
-        Vector3 forceToMove;
-        gettingReadyToMove = true;
+        Vector3 positionOne = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+        inAttack = true;
+        transform.LookAt(point);
+        rigidBody.AddForce(transform.up * jumpForce);
         while (normalizedTime <= 1f)
         {
             normalizedTime += Time.deltaTime / duration;
-            //Debug.Log("normalizedTime:" + normalizedTime);
+            rigidBody.MovePosition(transform.position + positionOne * Time.deltaTime * movementSpeed);
+            positionOne.y += normalizedTime * 2;
             yield return null;
         }
-        gettingReadyToMove = false;
-        //Debug.Log(inPool);
-        if (isGrounded() && inPool == false)
+        StartCoroutine(DoMove(point));
+    }
+    IEnumerator DoMove(Vector3 point)
+    {
+        float duration = attackRate/3;
+        float normalizedTime = 0;
+        transform.LookAt(point);
+        rigidBody.AddForce(transform.up * jumpForce);
+        while (normalizedTime <= 1f)
         {
-            //Debug.Log("buffMultiplier: " + buffMultiplier);
-            randToMove = Random.Range(-randMoveSetRange - 1, randMoveSetRange + 1);
-            randToMove *= buffMultiplier;
-
-            if (Random.Range(-1, 1) >= 0)
-            {
-                //Debug.Log("Applying force on right: " + randToMove + " Without multiplier:" + randToMoveWO);
-                forceToMove = transform.right * randToMove;
-            }
-            else
-            {
-                //Debug.Log("Applying force on forward: " + randToMove + " Without multiplier:" + randToMoveWO);
-                forceToMove = transform.forward * randToMove;
-            }
-
-            rigidBody.AddForce(forceToMove);
- 
-
+            normalizedTime += Time.deltaTime / duration;
+            rigidBody.MovePosition(transform.position + point * Time.deltaTime * movementSpeed);
+            yield return null;
         }
+        StartCoroutine(CoolDown());
     }
 
+    IEnumerator CoolDown()
+    {
+        float duration = attackRate/3;
+        float normalizedTime = 0;
+        while (normalizedTime <= 1f)
+        {
+            normalizedTime += Time.deltaTime / duration;
+            yield return null;
+        }
+        inAttack = false;
+    }
 }

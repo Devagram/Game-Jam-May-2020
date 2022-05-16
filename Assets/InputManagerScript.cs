@@ -57,7 +57,7 @@ public class InputManagerScript : MonoBehaviour
 
         while (normalizedTime <= 1f)
         {
-            ;
+            
             normalizedTime += Time.deltaTime / duration;
             yield return null;
         }
