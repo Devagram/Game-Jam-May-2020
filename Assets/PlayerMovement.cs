@@ -16,6 +16,7 @@ public class PlayerMovement : MonoBehaviour
     public Collider attackHitBox;
     public float attackDuration;
     private AudioSource audioSource;
+    public AudioClip swipeSound;
     public AudioClip hitSound;
     public float dashDuration;
     public float dashCooldown;
@@ -72,8 +73,9 @@ public class PlayerMovement : MonoBehaviour
         }
 
         //ATTACKING
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetButtonDown("Fire1") && attackHitBox.enabled == false)
         {
+            audioSource.PlayOneShot(swipeSound, .5f);
             attackHitBox.enabled = true;
             StartCoroutine(Attack());
         }
@@ -122,7 +124,8 @@ public class PlayerMovement : MonoBehaviour
             rigidBodyIntersected.AddForce(transform.forward * 5);
             npcCollidedWith.Damage(attackDamage);
             rigidBody.AddForce(transform.forward * -50);
-        }else if (collidingWith.tag == "BadGuy")
+        }
+        else if (collidingWith.tag == "BadGuy")
         {
             hostileCollidedWith = collidingWith.gameObject.GetComponent<HostileNPC>();
             audioSource.PlayOneShot(hitSound);
@@ -132,11 +135,11 @@ public class PlayerMovement : MonoBehaviour
         else if (collidingWith.tag == "Grass")
         {
             movementSpeed = 7;
-        }else if (collidingWith.tag == "Pool")
+        }
+        else if (collidingWith.tag == "Pool")
         {
             movementSpeed = 5;
         }
-
     }
 
     private void OnTriggerExit(Collider other)
