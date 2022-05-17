@@ -115,11 +115,12 @@ MonoBehaviour:
   myCollider: {fileID: 885119496229302460}
   player: {fileID: 0}
   hitPoints: 5
-  movementSpeed: 1
+  movementSpeed: 5
+  maxMovementSpeed: 20
   movementTimer: 5
   buffMultiplier: 2
   popForce: 10
-  jumpForce: 0.5
+  jumpHeight: 18
   attackRate: 6
   coolDown: 3
   gettingReadyToMove: 0
