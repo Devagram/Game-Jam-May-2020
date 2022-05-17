@@ -118,7 +118,7 @@
                 "m_Node": {
                     "m_Id": "d93160c4e1434181a13cd1398a5f9c95"
                 },
-                "m_SlotId": 0
+                "m_SlotId": 1
             },
             "m_InputSlot": {
                 "m_Node": {
@@ -879,7 +879,7 @@
     "m_ShaderOutputName": "B",
     "m_StageCapability": 3,
     "m_Value": {
-        "e00": 0.009999999776482582,
+        "e00": 0.02500000037252903,
         "e01": 2.0,
         "e02": 2.0,
         "e03": 2.0,
@@ -969,8 +969,8 @@
     "m_ShaderOutputName": "Tiling",
     "m_StageCapability": 3,
     "m_Value": {
-        "x": 2.0,
-        "y": 2.0
+        "x": 10.0,
+        "y": 10.0
     },
     "m_DefaultValue": {
         "x": 0.0,
