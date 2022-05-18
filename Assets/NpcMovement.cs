@@ -48,8 +48,19 @@ public class NpcMovement : MonoBehaviour
     public bool foodHasBeenFound = false;
     public bool dead = false;
 
+
+    //Warren Was Here
+    private Animator anim;
+    private bool isWalking = false;
+
+    //
+
+
     void Start()
     {
+        //
+        anim = GetComponentInChildren<Animator>();
+        //
         gameController = Object.FindObjectOfType<GameController>();
         audioSource = GetComponent<AudioSource>();
         closestFoodObj  = new GameObject("empty");
@@ -59,6 +70,18 @@ public class NpcMovement : MonoBehaviour
 
     void Update()
     {
+        //
+        if(isWalking)
+        {
+            anim.SetBool("walk", true);
+        }
+        else
+        {
+            anim.SetBool("walk", false);
+        }
+        //
+
+
         distanceToGround = genericCollider.bounds.extents.y;
         isGroundedBool = isGrounded();
     }
@@ -218,6 +241,20 @@ public class NpcMovement : MonoBehaviour
 
     IEnumerator DoMove(Vector3 point)
     {
+        
+        //
+        isWalking = true;
+        //
+
+
+        //// This the .rotation could be changed to only rotating the Y.
+        //Vector3 targetDirection = point - transform.position;
+        //Vector3 newDirection = Vector3.RotateTowards(transform.forward, targetDirection, 1 , 1);
+        //rigidBody.rotation = Quaternion.LookRotation(newDirection);
+        //
+
+
+
         float duration = moveDuration;
         float normalizedTime = 0;
 
@@ -227,6 +264,10 @@ public class NpcMovement : MonoBehaviour
             rigidBody.MovePosition(transform.position + point * Time.deltaTime * movementSpeed);
             yield return null;
         }
+
+        //
+        isWalking = false;
+        //
     }
 
     Vector3 randomPoint()

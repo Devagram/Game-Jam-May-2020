@@ -77,6 +77,6 @@ public class InputManagerScript : MonoBehaviour
 
         //This Lerps an amount of time fading the Mask off to look more natural.
         anim.SetLayerWeight(1,Mathf.Lerp(anim.GetLayerWeight(1), 0, (1) * Time.deltaTime / timeToResetMask));
-        Debug.Log(anim.GetLayerWeight(1));
+        //Debug.Log(anim.GetLayerWeight(1));
     }
 }
