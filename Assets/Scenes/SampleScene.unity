@@ -6458,7 +6458,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7297764394128168102, guid: d98e70525e47e5b41b5f1634b1f84e0b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.9
+      value: 2.55
       objectReference: {fileID: 0}
     - target: {fileID: 7297764394128168102, guid: d98e70525e47e5b41b5f1634b1f84e0b, type: 3}
       propertyPath: m_LocalPosition.y
@@ -6466,7 +6466,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7297764394128168102, guid: d98e70525e47e5b41b5f1634b1f84e0b, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -15.69
+      value: -7.47
       objectReference: {fileID: 0}
     - target: {fileID: 7297764394128168102, guid: d98e70525e47e5b41b5f1634b1f84e0b, type: 3}
       propertyPath: m_LocalRotation.w
@@ -16467,6 +16467,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 40635602eb60e5e4c820e3057995ab8c, type: 3}
+--- !u!114 &915312220 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1030384423806561656, guid: f9159970e5b62ac44a4c0b2cc7d364dd, type: 3}
+  m_PrefabInstance: {fileID: 7825068625021544844}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae46558d2a8fdb447b424664a179808f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &915394742
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -36546,6 +36557,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1030384423806561656, guid: f9159970e5b62ac44a4c0b2cc7d364dd, type: 3}
+      propertyPath: timeToResetMask
+      value: 0.8
+      objectReference: {fileID: 0}
     - target: {fileID: 7825068625078211945, guid: f9159970e5b62ac44a4c0b2cc7d364dd, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -36618,6 +36633,14 @@ PrefabInstance:
       propertyPath: startingSpeed
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 7825068625078211946, guid: f9159970e5b62ac44a4c0b2cc7d364dd, type: 3}
+      propertyPath: attackDuration
+      value: 0.65
+      objectReference: {fileID: 0}
+    - target: {fileID: 7825068625078211946, guid: f9159970e5b62ac44a4c0b2cc7d364dd, type: 3}
+      propertyPath: inputManagerScript
+      value: 
+      objectReference: {fileID: 915312220}
     - target: {fileID: 7825068625078211946, guid: f9159970e5b62ac44a4c0b2cc7d364dd, type: 3}
       propertyPath: movementAcceleration
       value: 10

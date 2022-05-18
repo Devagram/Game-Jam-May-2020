@@ -158,6 +158,7 @@ public class PlayerMovement : MonoBehaviour
 
     private IEnumerator Attack()
     {
+        
         float duration = attackDuration;
         float normalizedTime = 0;
 
@@ -167,6 +168,7 @@ public class PlayerMovement : MonoBehaviour
             yield return null;
         }
         attackHitBox.enabled = false;
+        
     }
 
     void FixedUpdate()

@@ -6,17 +6,17 @@ AvatarMask:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: New Avatar Mask
-  m_Mask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+  m_Name: AvatarMask
+  m_Mask: 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
   m_Elements:
   - m_Path: 
     m_Weight: 1
   - m_Path: Armature
-    m_Weight: 1
+    m_Weight: 0
   - m_Path: Armature/Base
-    m_Weight: 1
+    m_Weight: 0
   - m_Path: Armature/Base/Pelvis
-    m_Weight: 1
+    m_Weight: 0
   - m_Path: Armature/Base/Pelvis/Chest
     m_Weight: 1
   - m_Path: Armature/Base/Pelvis/Chest/Head
@@ -40,31 +40,31 @@ AvatarMask:
   - m_Path: Armature/Base/Pelvis/Chest/R.Arm/R.Arm.001/R.Hand/R.Hand_end
     m_Weight: 1
   - m_Path: Armature/Base/Pelvis/L.Hip
-    m_Weight: 1
+    m_Weight: 0
   - m_Path: Armature/Base/Pelvis/L.Hip/L.Shin
-    m_Weight: 1
+    m_Weight: 0
   - m_Path: Armature/Base/Pelvis/L.Hip/L.Shin/L.Foot
-    m_Weight: 1
+    m_Weight: 0
   - m_Path: Armature/Base/Pelvis/L.Hip/L.Shin/L.Foot/L.Foot_end
-    m_Weight: 1
+    m_Weight: 0
   - m_Path: Armature/Base/Pelvis/R.Hip
-    m_Weight: 1
+    m_Weight: 0
   - m_Path: Armature/Base/Pelvis/R.Hip/R.Shin
-    m_Weight: 1
+    m_Weight: 0
   - m_Path: Armature/Base/Pelvis/R.Hip/R.Shin/R.Foot
-    m_Weight: 1
+    m_Weight: 0
   - m_Path: Armature/Base/Pelvis/R.Hip/R.Shin/R.Foot/R.Foot_end
-    m_Weight: 1
+    m_Weight: 0
   - m_Path: Cube
-    m_Weight: 1
+    m_Weight: 0
   - m_Path: MainPlayer
     m_Weight: 0
   - m_Path: MainPlayer.001
-    m_Weight: 1
+    m_Weight: 0
   - m_Path: MainPlayer.002
-    m_Weight: 1
+    m_Weight: 0
   - m_Path: MainPlayer.003
-    m_Weight: 1
+    m_Weight: 0
   - m_Path: MainPlayer.004
     m_Weight: 0
   - m_Path: MainPlayer.005
@@ -72,17 +72,17 @@ AvatarMask:
   - m_Path: MainPlayer.006
     m_Weight: 0
   - m_Path: MainPlayer.007
-    m_Weight: 1
+    m_Weight: 0
   - m_Path: MainPlayer.008
-    m_Weight: 1
+    m_Weight: 0
   - m_Path: MainPlayer.009
-    m_Weight: 1
+    m_Weight: 0
   - m_Path: MainPlayer.010
-    m_Weight: 1
+    m_Weight: 0
   - m_Path: MainPlayer.011
-    m_Weight: 1
+    m_Weight: 0
   - m_Path: MainPlayer.012
-    m_Weight: 1
+    m_Weight: 0
   - m_Path: MainPlayer.013
     m_Weight: 0
   - m_Path: MainPlayer.014
