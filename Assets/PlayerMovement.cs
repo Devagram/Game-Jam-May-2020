@@ -26,7 +26,6 @@ public class PlayerMovement : MonoBehaviour
     public bool playerLocked = false;
     public bool inDash = false;
 
-
     void Start()
     {
         movementSpeed = startingSpeed;
@@ -175,6 +174,8 @@ public class PlayerMovement : MonoBehaviour
     {
         RaycastHit hit;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        //finds the mask @ the index and uses it 6 is "Ground."
+        int maskLayer = 1 << 6;
 
         if (isGrounded())
         {
@@ -184,7 +185,8 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        if (Physics.Raycast(ray, out hit, 100))
+        //Added Mask
+        if (Physics.Raycast(ray, out hit, 100, maskLayer))
         {
             Vector3 forward = transform.TransformDirection(Vector3.forward) * 100 + new Vector3(transform.eulerAngles.x, 0, transform.eulerAngles.z);
             if (!playerLocked) {
